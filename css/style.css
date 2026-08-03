@@ -899,16 +899,20 @@ h1, h2, h3 { margin: 0; font-weight: 700; }
 /* ============================= 12. CONFIANZA ============================= */
 
 .trustbar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px var(--gutter) 32px;
+  padding: 26px var(--gutter) 32px;
+  margin-top: 8px;
   text-align: center;
   color: var(--muted);
-  font-size: .8rem;
+  font-size: .82rem;
+  border-top: 1px solid var(--line);
 }
-.trustbar__ico { width: 15px; height: 15px; color: var(--sand); flex: none; }
+.trustbar__line {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+.trustbar__ico { width: 14px; height: 14px; color: var(--sand); flex: none; }
 .trustbar p { margin: 0; }
 .trustbar strong { color: var(--white); font-weight: 700; }
 
