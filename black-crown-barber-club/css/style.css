@@ -1,0 +1,949 @@
+/* ==========================================================================
+   Black Crown Barber Club — hoja de estilos
+   1. Variables y base
+   2. Utilidades y componentes (botones, chips, títulos, ornamento, scroll)
+   3. Cabecera y navegación
+   4. Hero
+   5. Cifras
+   6. Franja de diferenciales
+   7. Carrusel (base compartida por servicios y opiniones)
+   8. Servicios
+   9. Nosotros
+   10. Opiniones
+   11. Contacto
+   12. Confianza
+   13. Botón flotante de WhatsApp
+   ========================================================================== */
+
+/* ============================ 1. VARIABLES Y BASE ======================== */
+
+:root {
+  /* Color */
+  --ink:        #08080a;   /* fondo principal, único en toda la web */
+  --surface:    #121216;   /* tarjetas */
+  --line:       rgba(255, 255, 255, .08);
+  --line-strong:rgba(255, 255, 255, .2);
+  --sand:       #e3b77e;   /* acento cálido */
+  --sand-dim:   rgba(227, 183, 126, .12);
+  --white:      #f7f5f2;
+  --muted:      #a09a92;
+  --on-sand:    #17120a;   /* texto sobre el acento */
+  --wa:         #25d366;   /* verde WhatsApp */
+  --wa-dark:    #1fb958;
+
+  /* Tipografía */
+  --font-display: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Formas y espaciado */
+  --container: 1240px;
+  --gutter: clamp(20px, 5vw, 44px);
+  --section-y: clamp(40px, 4.5vw, 64px);
+  --header-h: 76px;
+  --r-lg: 22px;
+  --r-md: 14px;
+
+  /* Movimiento */
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --t: 320ms var(--ease);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 12px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--ink);
+  /* Resplandores ambientales, fijos respecto a la pantalla: dan profundidad
+     y calidez sin depender de ninguna sección en concreto */
+  background-image:
+    radial-gradient(ellipse 55% 45% at 12% 8%, rgba(227, 183, 126, .10), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 92% 88%, rgba(227, 183, 126, .08), transparent 70%);
+  background-repeat: no-repeat, no-repeat;
+  background-attachment: fixed, fixed;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+
+img, svg, iframe { display: block; max-width: 100%; }
+img { height: auto; }
+
+a { color: inherit; text-decoration: none; }
+p { margin: 0 0 1em; }
+h1, h2, h3 { margin: 0; font-weight: 700; }
+
+:focus-visible {
+  outline: 2px solid var(--sand);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 200;
+  background: var(--sand);
+  color: var(--on-sand);
+  padding: 12px 18px;
+  font-size: .85rem;
+  font-weight: 600;
+}
+.skip-link:focus { left: 12px; top: 12px; }
+
+/* Textura de grano muy sutil: da profundidad sin peso ni peticiones */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: .03;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>");
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section { padding-block: var(--section-y); }
+
+@media (max-width: 620px) {
+  .section { padding-block: clamp(30px, 7vw, 42px); }
+}
+
+
+/* ==================== 2. UTILIDADES Y COMPONENTES ======================= */
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+  color: var(--sand);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+.eyebrow::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: currentColor;
+  flex: none;
+}
+
+.h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 4.2vw, 3.05rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -.03em;
+}
+.h2 em { font-style: normal; color: var(--sand); }
+
+.lead {
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 1.02rem;
+  max-width: 52ch;
+}
+.lead strong { color: var(--white); font-weight: 600; }
+
+.section__head { max-width: 660px; margin-bottom: clamp(28px, 4vw, 48px); }
+
+.stars { color: var(--sand); letter-spacing: .08em; }
+
+.ico { width: 18px; height: 18px; flex: none; }
+
+/* Ornamento circular: el detalle "premium" de la marca, en SVG y sin peso */
+.ornament {
+  position: absolute;
+  color: var(--sand);
+  pointer-events: none;
+  aspect-ratio: 1;
+}
+
+/* Botones — forma de píldora, texto en caja baja */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 28px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: .95rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--t), border-color var(--t), color var(--t),
+              transform var(--t), box-shadow var(--t);
+}
+.btn--lg { padding: 18px 34px; font-size: 1rem; }
+.btn--sm { padding: 11px 20px; font-size: .86rem; }
+.btn--xs { padding: 9px 18px; font-size: .82rem; }
+.btn--sm .ico, .btn--xs .ico { width: 16px; height: 16px; }
+
+/* Botón de reserva: siempre el verde de WhatsApp, con el logo a la izquierda */
+.btn--whatsapp {
+  background: var(--wa);
+  color: #fff;
+}
+.btn--whatsapp:hover {
+  background: var(--wa-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(37, 211, 102, .3);
+}
+
+.btn--dark {
+  background: rgba(255, 255, 255, .05);
+  border-color: var(--line);
+  color: var(--white);
+  backdrop-filter: blur(8px);
+}
+.btn--dark:hover {
+  background: rgba(255, 255, 255, .1);
+  border-color: var(--line-strong);
+  transform: translateY(-2px);
+}
+
+.btn--outline {
+  border-color: var(--line-strong);
+  color: var(--white);
+}
+.btn--outline:hover {
+  border-color: var(--sand);
+  color: var(--sand);
+  background: var(--sand-dim);
+  transform: translateY(-2px);
+}
+
+.btn:active { transform: translateY(0); }
+
+/* Chips informativos del hero */
+.chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .04);
+  backdrop-filter: blur(8px);
+  font-size: .85rem;
+  color: rgba(247, 245, 242, .9);
+}
+.chip .ico { width: 15px; height: 15px; color: var(--sand); }
+
+/* Aparición progresiva al hacer scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .8s var(--ease), transform .8s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+.reveal.is-visible { opacity: 1; transform: none; }
+
+
+/* ======================= 3. CABECERA Y NAVEGACIÓN ======================= */
+
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  border-bottom: 1px solid transparent;
+  transition: background var(--t), border-color var(--t), backdrop-filter var(--t);
+}
+.header.is-scrolled {
+  background: rgba(8, 8, 10, .86);
+  backdrop-filter: blur(14px);
+  border-bottom-color: var(--line);
+}
+
+.header__inner {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.brand { display: inline-flex; align-items: center; gap: 12px; color: var(--white); }
+.brand__mark { width: 30px; height: 30px; color: var(--sand); flex: none; }
+.brand__text { display: flex; flex-direction: column; line-height: 1; }
+.brand__text strong {
+  font-family: var(--font-display);
+  font-size: 1.06rem;
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+.brand__text em {
+  font-style: normal;
+  font-size: .56rem;
+  font-weight: 600;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 5px;
+}
+
+.nav { display: flex; align-items: center; gap: 32px; }
+.nav > a:not(.btn) {
+  position: relative;
+  font-size: .92rem;
+  font-weight: 500;
+  color: rgba(247, 245, 242, .78);
+  transition: color var(--t);
+}
+.nav > a:not(.btn)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 1px;
+  background: var(--sand);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--t);
+}
+.nav > a:not(.btn):hover { color: var(--white); }
+.nav > a:not(.btn):hover::after { transform: scaleX(1); }
+
+/* En móvil no hay menú desplegable: solo se ve el botón de reserva,
+   siempre visible porque la cabecera ya es fija (position: fixed). */
+@media (max-width: 980px) {
+  .nav > a:not(.btn) { display: none; }
+}
+
+
+/* ================================ 4. HERO =============================== */
+
+.hero {
+  position: relative;
+  display: flex;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.hero__media { position: absolute; inset: 0; z-index: 0; }
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  filter: grayscale(.18) contrast(1.06);
+}
+.hero__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(8,8,10,.7) 0%, rgba(8,8,10,.42) 35%, rgba(8,8,10,.97) 100%),
+    linear-gradient(90deg, rgba(8,8,10,.92) 0%, rgba(8,8,10,.3) 65%, rgba(8,8,10,.55) 100%);
+}
+
+.hero__ornament {
+  z-index: 1;
+  width: min(80vw, 480px);
+  top: 14%;
+  right: -22%;
+  opacity: .14;
+  transform: rotate(var(--rot, 0deg));
+  will-change: transform;
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 44px;
+  width: 100%;
+  padding-block: calc(var(--header-h) + 40px) 40px;
+}
+
+.hero__content { align-self: center; max-width: 620px; }
+
+.hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -.035em;
+  margin-bottom: 30px;
+}
+.hero__title em { font-style: normal; color: var(--sand); }
+
+/* Prueba social justo debajo del titular */
+.proof { display: flex; align-items: center; gap: 16px; }
+.proof__avatars { display: flex; flex: none; }
+.proof__avatars img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--ink);
+  margin-left: -13px;
+}
+.proof__avatars img:first-child { margin-left: 0; }
+.proof__score {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  font-size: .96rem;
+}
+.proof__score strong { font-family: var(--font-display); font-weight: 700; }
+.proof__label { margin: 0; color: var(--muted); font-size: .86rem; }
+
+.hero__foot {
+  align-self: end;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+.hero__desc {
+  margin: 0;
+  max-width: 48ch;
+  color: rgba(247, 245, 242, .72);
+  font-size: .95rem;
+}
+.hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+@media (min-width: 981px) {
+  /* En escritorio la foto ocupa la mitad derecha, como una portada */
+  .hero__media { left: 46%; }
+  .hero__media img { object-position: center 22%; }
+  .hero__media::after {
+    background:
+      linear-gradient(90deg, var(--ink) 0%, rgba(8,8,10,.88) 12%, rgba(8,8,10,.1) 46%, transparent 68%),
+      linear-gradient(180deg, rgba(8,8,10,.38) 0%, transparent 20%, rgba(8,8,10,.45) 100%);
+  }
+  .hero__ornament {
+    width: min(46vw, 620px);
+    top: 50%;
+    right: auto;
+    left: 33%;
+    transform: translateY(-50%) rotate(var(--rot, 0deg));
+    opacity: .22;
+  }
+}
+
+/* Escritorio estrecho: la foto se retira para que el titular no la pise */
+@media (min-width: 981px) and (max-width: 1199px) {
+  .hero__media { left: 50%; }
+  .hero__content { max-width: 520px; }
+  .hero__title { font-size: clamp(2.4rem, 5.4vw, 3.6rem); }
+  .hero__ornament { left: 38%; width: 42vw; }
+}
+
+/* Móvil: el hero se ajusta al contenido en vez de forzar toda la pantalla,
+   así el titular no queda flotando lejos de la cabecera ni de la sección siguiente */
+@media (max-width: 620px) {
+  .hero { min-height: auto; }
+  .hero__inner {
+    grid-template-rows: none;
+    padding-block: calc(var(--header-h) + 26px) 26px;
+    gap: 26px;
+  }
+  .hero__content { align-self: auto; }
+  .hero__foot { align-self: auto; padding-top: 20px; }
+  .hero__actions { width: 100%; }
+  .hero__actions .btn { flex: 1 1 100%; }
+  .proof__label { font-size: .82rem; }
+}
+
+
+/* ============================= 5. CIFRAS ================================ */
+/* Caja de números justo bajo el hero: tarjeta bordeada y redondeada,
+   2 columnas en móvil y 4 a partir de 760px. */
+
+.stats-top { padding-block: clamp(28px, 4vw, 44px); }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+
+/* ============ 7. CARRUSEL (base para servicios y opiniones) ============= */
+/*
+  Mismo patrón para las dos secciones: en móvil es un carrusel deslizable
+  con scroll-snap — se ve una tarjeta centrada y las vecinas asoman
+  difuminadas a los lados — con flechas y puntos para navegar sin deslizar.
+  A partir de 760px vuelve a ser la parrilla normal, sin carrusel.
+*/
+
+.carousel { position: relative; }
+
+.carousel__track {
+  display: flex;
+  gap: 16px;
+  padding-block: 4px;
+  padding-inline: 11%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 11%;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.carousel__track::-webkit-scrollbar { display: none; }
+
+.carousel__slide {
+  flex: 0 0 78%;
+  min-width: 0;
+  scroll-snap-align: center;
+}
+
+@media (min-width: 460px) {
+  .carousel__track { padding-inline: 19%; scroll-padding-inline: 19%; }
+  .carousel__slide { flex-basis: 62%; }
+}
+
+/* Las tarjetas que no están centradas se difuminan y encogen un poco */
+@media (max-width: 759px) {
+  .carousel__slide {
+    opacity: calc(1 - var(--dist, 0) * .6);
+    filter: blur(calc(var(--dist, 0) * 2.5px));
+    transform: scale(calc(1 - var(--dist, 0) * .08));
+    transition: opacity .2s linear, filter .2s linear, transform .2s linear;
+  }
+}
+
+.carousel__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  transform: translateY(-50%);
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: rgba(8, 8, 10, .7);
+  color: var(--white);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background var(--t), border-color var(--t), color var(--t);
+}
+.carousel__arrow:hover { background: var(--sand-dim); border-color: var(--sand); color: var(--sand); }
+.carousel__arrow--prev { left: -4px; }
+.carousel__arrow--next { right: -4px; }
+
+.carousel__dots { display: flex; justify-content: center; gap: 8px; margin-top: 22px; }
+.carousel__dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--line-strong);
+  cursor: pointer;
+  transition: background var(--t), transform var(--t);
+}
+.carousel__dot.is-active { background: var(--sand); transform: scale(1.4); }
+
+/* Desde 760px: sin carrusel, cada sección recupera su parrilla habitual */
+@media (min-width: 760px) {
+  .carousel__arrow,
+  .carousel__dots { display: none; }
+
+  .carousel__track {
+    overflow: visible;
+    scroll-snap-type: none;
+    padding-inline: 0;
+    scroll-padding-inline: 0;
+  }
+  .carousel__slide { flex-basis: auto; scroll-snap-align: none; }
+
+  .carousel--services .carousel__track {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  .carousel--reviews .carousel__track {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  /* El efecto de elevación al pasar el ratón solo tiene sentido en la parrilla estática */
+  .service:hover {
+    border-color: rgba(227, 183, 126, .38);
+    transform: translateY(-6px);
+    box-shadow: 0 26px 54px rgba(0, 0, 0, .5);
+  }
+  .review:hover { border-color: rgba(227, 183, 126, .3); transform: translateY(-4px); }
+}
+
+
+/* ============================= 8. SERVICIOS ============================= */
+
+.service {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  transition: border-color var(--t), transform var(--t), box-shadow var(--t);
+}
+
+.service__media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
+.service__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .8s var(--ease);
+}
+.service:hover .service__media img { transform: scale(1.07); }
+
+.service__tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: var(--sand);
+  color: var(--on-sand);
+  font-family: var(--font-display);
+  font-size: .72rem;
+  font-weight: 700;
+}
+
+.service__body { display: flex; flex-direction: column; flex: 1; padding: 24px 24px 22px; }
+
+.service__name {
+  font-family: var(--font-display);
+  font-size: 1.24rem;
+  font-weight: 700;
+  letter-spacing: -.025em;
+  margin-bottom: 8px;
+}
+.service__desc { color: var(--muted); font-size: .9rem; margin-bottom: 22px; }
+
+.service__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.service__price {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -.03em;
+}
+
+
+/* ================================ 9. NOSOTROS ============================ */
+
+.about {
+  display: grid;
+  gap: clamp(32px, 5vw, 70px);
+  align-items: center;
+}
+@media (min-width: 880px) {
+  .about { grid-template-columns: .85fr 1fr; }
+}
+
+.about__media { position: relative; }
+.about__media img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: var(--r-lg);
+  filter: grayscale(.2);
+}
+/* Marco desplazado: detalle de marca, coste cero */
+.about__media::after {
+  content: "";
+  position: absolute;
+  inset: 18px -18px -18px 18px;
+  border: 1px solid rgba(227, 183, 126, .32);
+  border-radius: var(--r-lg);
+}
+
+.about__badge {
+  position: absolute;
+  z-index: 2;
+  right: -14px;
+  bottom: 26px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 22px;
+  background: var(--ink);
+  border: 1px solid rgba(227, 183, 126, .32);
+  border-radius: var(--r-md);
+}
+.about__badge strong {
+  font-family: var(--font-display);
+  font-size: 2.1rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.04em;
+  color: var(--sand);
+}
+.about__badge span {
+  font-size: .7rem;
+  line-height: 1.35;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+@media (max-width: 620px) {
+  .about__media::after { inset: 12px -12px -12px 12px; }
+  .about__badge { right: 0; bottom: 20px; }
+}
+
+.about__text p { color: var(--muted); max-width: 54ch; }
+.about__text .h2 { margin-bottom: 22px; }
+
+.ticks { list-style: none; margin: 28px 0 0; padding: 0; }
+.ticks li {
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 12px;
+  font-size: .95rem;
+}
+.ticks li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 14px;
+  height: 7px;
+  border-left: 1.5px solid var(--sand);
+  border-bottom: 1.5px solid var(--sand);
+  transform: rotate(-45deg);
+}
+
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: var(--ink);
+  padding: 14px 6px;
+  text-align: center;
+}
+.stat p { margin: 0; display: flex; flex-direction: column; gap: 2px; line-height: 1.25; }
+.stat strong {
+  font-family: var(--font-display);
+  font-size: clamp(.85rem, 4vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  color: var(--sand);
+}
+.stat span { color: var(--muted); font-size: .58rem; }
+
+@media (min-width: 640px) {
+  .stat { padding: 28px 18px; gap: 8px; }
+  .stat p { gap: 4px; }
+  .stat span { font-size: .8rem; }
+}
+
+
+/* ============================= 10. OPINIONES ============================ */
+
+.review {
+  position: relative;
+  margin: 0;
+  padding: 32px 30px 26px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  transition: border-color var(--t), transform var(--t);
+}
+.review::before {
+  content: "\201C";
+  position: absolute;
+  top: 16px;
+  right: 26px;
+  font-family: var(--font-display);
+  font-size: 3.4rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--sand);
+  opacity: .18;
+}
+.review .stars { font-size: .9rem; }
+.review blockquote { margin: 14px 0 24px; font-size: 1.02rem; line-height: 1.6; }
+
+.review figcaption {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.review figcaption img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex: none; }
+.review figcaption span { display: flex; flex-direction: column; line-height: 1.4; }
+.review figcaption strong { font-size: .92rem; font-weight: 600; }
+.review figcaption small { color: var(--muted); font-size: .78rem; }
+
+
+/* ============================= 11. CONTACTO ============================= */
+
+.contact__info { max-width: 640px; }
+
+/* Solo en escritorio: dos columnas para aprovechar el ancho
+   (Dirección + mapa a la izquierda, Horario y Contacto a la derecha).
+   En móvil sigue siendo una sola columna, sin tocar. */
+@media (min-width: 880px) {
+  .contact__info {
+    max-width: none;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 0 56px;
+  }
+  .contact__info .info-block:nth-child(1) { grid-column: 1; grid-row: 1 / span 2; }
+  .contact__info .info-block:nth-child(2) { grid-column: 2; grid-row: 1; }
+  .contact__info .info-block:nth-child(3) { grid-column: 2; grid-row: 2; }
+}
+
+.info-block { padding-bottom: 22px; margin-bottom: 22px; border-bottom: 1px solid var(--line); }
+.info-block--last { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+.info-block h3 {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--sand);
+  margin-bottom: 12px;
+}
+.info-block p { margin: 0; color: rgba(247, 245, 242, .88); }
+.info-block a { transition: color var(--t); }
+.info-block a:hover { color: var(--sand); }
+
+.info-block__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.hours { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.hours th { text-align: left; font-weight: 400; color: var(--muted); padding: 5px 0; }
+.hours td { text-align: right; padding: 5px 0; }
+.hours__closed { color: var(--muted); }
+
+.contact__map {
+  margin-top: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  min-height: 260px;
+}
+.contact__map iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  border: 0;
+  /* El mapa de Google se integra con el fondo oscuro de la web */
+  filter: grayscale(1) invert(.92) contrast(.85);
+}
+@media (min-width: 640px) {
+  .contact__map,
+  .contact__map iframe { min-height: 340px; }
+}
+
+
+/* ============================= 12. CONFIANZA ============================= */
+
+.trustbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px var(--gutter) 32px;
+  text-align: center;
+  color: var(--muted);
+  font-size: .8rem;
+}
+.trustbar__ico { width: 15px; height: 15px; color: var(--sand); flex: none; }
+.trustbar p { margin: 0; }
+.trustbar strong { color: var(--white); font-weight: 700; }
+
+
+/* ====================== 13. BOTÓN FLOTANTE WHATSAPP ====================== */
+
+.fab {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--wa);
+  color: #fff;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .45);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(14px) scale(.9);
+  transition: opacity var(--t), transform var(--t), visibility var(--t), box-shadow var(--t);
+}
+.fab.is-visible { opacity: 1; visibility: visible; transform: none; }
+.fab:hover { transform: translateY(-3px); box-shadow: 0 16px 34px rgba(37, 211, 102, .35); }
+.fab svg { width: 30px; height: 30px; }
+
+
+/* ====================== ACCESIBILIDAD: MENOS MOVIMIENTO ================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
