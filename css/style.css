@@ -532,13 +532,13 @@ h1, h2, h3 { margin: 0; font-weight: 700; }
   .carousel__slide { flex-basis: 62%; }
 }
 
-/* Las tarjetas que no están centradas se difuminan y encogen un poco */
+/* Las tarjetas que no están centradas se atenúan suavemente.
+   Antes se aplicaba blur + scale aquí, pero eso dejaba la imagen
+   activa borrosa y descentrada durante el snap. Solo opacidad. */
 @media (max-width: 759px) {
   .carousel__slide {
-    opacity: calc(1 - var(--dist, 0) * .6);
-    filter: blur(calc(var(--dist, 0) * 2.5px));
-    transform: scale(calc(1 - var(--dist, 0) * .08));
-    transition: opacity .2s linear, filter .2s linear, transform .2s linear;
+    opacity: calc(1 - var(--dist, 0) * .55);
+    transition: opacity .25s linear;
   }
 }
 

@@ -108,7 +108,18 @@
     window.addEventListener("resize", onTrackScroll);
 
     dots[0].classList.add("is-active");
+
+    // Centra el primer slide al cargar: sin esto, la primera imagen
+    // aparecía ladeada a la izquierda y con el blur residual activo.
+    // Usamos "auto" para que sea instantáneo y no haya parpadeo de snap.
+    var first = slides[0];
+    var firstLeft = first.offsetLeft - (track.clientWidth - first.clientWidth) / 2;
+    track.scrollLeft = Math.max(firstLeft, 0);
+
     update();
+
+    // Tras cargar imágenes (pueden cambiar el ancho) recalculamos.
+    window.addEventListener("load", function () { update(); });
   });
 
 })();
